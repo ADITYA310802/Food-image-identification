@@ -1,42 +1,35 @@
 pipeline {
     agent any
     
+    tools {
+        gradle 'Gradle' // specify the Gradle installation name configured in Jenkins
+    }
+    
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/ADITYA310802/Food-image-identification.git'
+                git branch: 'main', url: 'https://github.com/ADITYA310802/Food-image-identification.git'
             }
         }
         
         stage('Build') {
             steps {
-                withGradle {
-                    sh './gradlew clean build'
-                }
+                sh './gradlew clean build'
             }
         }
         
         stage('Test') {
             steps {
-                withGradle {
-                    sh './gradlew test'
-                }
+                sh './gradlew test'
             }
         }
         
         stage('Deploy') {
             steps {
-                withGradle {
-                    sh './gradlew deploy'
-                }
+                sh './gradlew deploy'
             }
         }
     }
     
     post {
         always {
-            junit '**/build/test-results/test/*.xml'
-        }
-    }
-}
-
